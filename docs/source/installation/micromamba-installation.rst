@@ -139,20 +139,18 @@ Windows
 
 .. code-block:: powershell
 
+  # Download the binary
   Invoke-Webrequest -URI https://micro.mamba.pm/api/micromamba/win-64/latest -OutFile micromamba.tar.bz2
-  tar xf micromamba.tar.bz2
+  mkdir "$HOME\micromamba"
+  bzip2 -d micromamba.tar.bz2
+  tar xf micromamba.tar -C "$HOME\micromamba"
 
-  MOVE -Force Library\bin\micromamba.exe micromamba.exe
-  .\micromamba.exe --help
-
-  # You can use e.g. $HOME\micromambaenv as your base prefix
-  $Env:MAMBA_ROOT_PREFIX="C:\Your\Root\Prefix"
+  # Remove the tar archive
+  Remove-Item micromamba.tar
 
   # Invoke the hook
-  .\micromamba.exe shell hook -s powershell | Out-String | Invoke-Expression
+  & "$HOME\micromamba\Library\bin\micromamba.exe" shell hook -s powershell | Out-String | Invoke-Expression
 
-  # ... or initialize the shell
-  .\micromamba.exe shell init -s powershell -p C:\Your\Root\Prefix
   # and use micromamba directly
   micromamba create -f ./test/env_win.yaml -y
   micromamba activate yourenv
